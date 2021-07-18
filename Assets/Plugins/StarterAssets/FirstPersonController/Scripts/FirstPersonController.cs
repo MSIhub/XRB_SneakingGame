@@ -73,6 +73,7 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
+		/*
 		void OnCollisionEnter(Collision hit)
 		{
 			if (hit.gameObject.CompareTag("Obstacle"))
@@ -89,7 +90,7 @@ namespace StarterAssets
 			}
 
 		}
-
+		*/
 		private void Awake()
 		{
 			// get a reference to our main camera
