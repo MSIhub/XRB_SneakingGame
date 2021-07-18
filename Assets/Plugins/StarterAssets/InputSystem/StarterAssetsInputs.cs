@@ -48,7 +48,7 @@ namespace StarterAssets
 #else
 	// old input sys if we do decide to have it (most likely wont)...
 #endif
-
+		
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{

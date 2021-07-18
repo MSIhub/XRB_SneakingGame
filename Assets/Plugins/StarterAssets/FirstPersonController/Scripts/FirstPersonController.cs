@@ -73,6 +73,23 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
+		void OnCollisionEnter(Collision hit)
+		{
+			if (hit.gameObject.CompareTag("Obstacle"))
+			{
+				Grounded = false;
+				Debug.Log("Hit");
+				_input.jump = false;
+			}
+			else
+			{
+				Grounded = true;
+				Debug.Log("Hit Not obstacle");
+				_input.jump = true;
+			}
+
+		}
+
 		private void Awake()
 		{
 			// get a reference to our main camera
