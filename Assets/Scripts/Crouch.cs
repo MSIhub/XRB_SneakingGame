@@ -1,39 +1,40 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Crouch : MonoBehaviour
+namespace Assets.Scripts
 {
-    [SerializeField] private CharacterController _charController; // [serializefield] will expose a private variable in the editor
-    [SerializeField] private float _crouchHeight = 1;
-    private float _originalHeight;
-    private bool _crouched = false;
-
-    // Start is called before the first frame update
-    void Start()
+    public class Crouch : MonoBehaviour
     {
-        _originalHeight = _charController.height;
-    }
+        [SerializeField] private CharacterController _charController; // [serializefield] will expose a private variable in the editor
+        [SerializeField] private float _crouchHeight = 1;
+        private float _originalHeight;
+        private bool _crouched = false;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnCrouch() //name of the function is predefined for an action
-    {
-        if (_crouched)
+        // Start is called before the first frame update
+        void Start()
         {
-            _crouched = false;
-            _charController.height = _originalHeight; 
-            Debug.Log(message:"Player got up");
+            _originalHeight = _charController.height;
         }
-        else
+
+        // Update is called once per frame
+        void Update()
         {
-            _crouched = true;
-            _charController.height = +_crouchHeight;
-            Debug.Log(message:"Player crouched down");    
+        
+        }
+
+        private void OnCrouch() //name of the function is predefined for an action
+        {
+            if (_crouched)
+            {
+                _crouched = false;
+                _charController.height = _originalHeight; 
+                Debug.Log(message:"Player got up");
+            }
+            else
+            {
+                _crouched = true;
+                _charController.height = +_crouchHeight;
+                Debug.Log(message:"Player crouched down");    
+            }
         }
     }
 }
