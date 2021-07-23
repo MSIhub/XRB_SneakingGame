@@ -8,6 +8,7 @@ public class Assignment2Trigger : MonoBehaviour
   [SerializeField] private Canvas canvasDisplay;
   [SerializeField] private Canvas canvasHide;
   
+  
   // Start is called before the first frame update
   void Start()
   {
@@ -37,3 +38,4 @@ public class Assignment2Trigger : MonoBehaviour
       canvasDisplay.gameObject.SetActive(false);
   }
 }
+//#TODO: Receive Canvas list and handle multiple canvas to display and hide 
