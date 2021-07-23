@@ -5,13 +5,23 @@ using UnityEngine;
 
 public class Assignment2Trigger : MonoBehaviour
 {
-  private void OnTriggerEnter(Collider other)
+  [SerializeField] private GameObject textField;
+  
+  // Start is called before the first frame update
+  void Start()
   {
-    Debug.Log(message:"Congrats, you triggered the volume!");
+      textField.SetActive(false);
   }
   
+  private void OnTriggerEnter(Collider other)
+  {
+     Debug.Log(message:"Congrats, you triggered the volume!");
+     textField.SetActive(true);
+  }
   private void OnTriggerExit(Collider other)
   {
-    Debug.Log(message:"You are out of trigger volume");
+      Debug.Log(message:"You are out of trigger volume");
+      textField.SetActive(false);
   }
+
 }
