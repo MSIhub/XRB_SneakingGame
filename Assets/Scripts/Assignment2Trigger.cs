@@ -6,8 +6,7 @@ using UnityEngine;
 public class Assignment2Trigger : MonoBehaviour
 {
   [SerializeField] private GameObject canv;
-  //[SerializeField] private GameObject canvasHide;
-
+  
   private CanvasActionOnTrigger[] _canvToDisp;
   private bool canvExist = false;
   
