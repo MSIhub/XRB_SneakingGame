@@ -5,21 +5,18 @@ using UnityEngine;
 
 public class Assignment2Trigger : MonoBehaviour
 {
-  [SerializeField] private GameObject canvasDisplay;
-  [SerializeField] private GameObject canvasHide;
+  [SerializeField] private GameObject canv;
+  //[SerializeField] private GameObject canvasHide;
 
-  private CanvasAction[] _canvToDisp;
-  private CanvasAction[] _canvToHide;
-  private bool _dispCanvExist = false;
-  private bool _hideCanvExist = false;
+  private CanvasActionOnTrigger[] _canvToDisp;
+  private bool canvExist = false;
+  
   
   // Start is called before the first frame update
   void Start()
   {
-      _canvToDisp = canvasDisplay.GetComponentsInChildren<CanvasAction>();
-      _canvToHide = canvasHide.GetComponentsInChildren<CanvasAction>();
-      _dispCanvExist = _canvToDisp.Length > 0 ? true : false;
-      _hideCanvExist = _canvToHide.Length > 0 ? true : false;
+      _canvToDisp = canv.GetComponentsInChildren<CanvasActionOnTrigger>();
+      canvExist = _canvToDisp.Length > 0 ? true : false;
       HideCanvas();
   }
   
@@ -35,44 +32,39 @@ public class Assignment2Trigger : MonoBehaviour
 
   private void DisplayCanvas()
   {
-      if (_dispCanvExist)
+      if (canvExist)
       {
           foreach (var child1 in _canvToDisp)
           {
-              Debug.Log(child1);
-              child1.gameObject.SetActive(true);
-          }
-      }
-
-      
-      if (_hideCanvExist)
-      {
-          foreach (var child2 in _canvToHide)
-          {
-              Debug.Log(child2);
-              child2.gameObject.SetActive(false);
-          }
+              if (child1.display)
+              {
+                  child1.gameObject.SetActive(true);    
+              }
+              else if (child1.hide)
+              {
+                  child1.gameObject.SetActive(false);
+              }
+          
+          }    
       }
   }
 
   private void HideCanvas()
   {
-      if (_dispCanvExist)
+      if (canvExist)
       {
           foreach (var child1 in _canvToDisp)
           {
-              Debug.Log(child1);
-              child1.gameObject.SetActive(false);
-          }
-      }
-
-      if (_hideCanvExist)
-      {
-          foreach (var child2 in _canvToHide)
-          {
-              Debug.Log(child2);
-              child2.gameObject.SetActive(true);
-          }
+              if (child1.display)
+              {
+                  child1.gameObject.SetActive(false);    
+              }
+              else if (child1.hide)
+              {
+                  child1.gameObject.SetActive(true);
+              }
+          
+          }    
       }
   }
 }
