@@ -1,28 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts;
+using Newtonsoft.Json.Bson;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private NavMeshAgent agent;
-    //Path
-    [SerializeField] private Transform point1;
-    [SerializeField] private Transform point2;
-
-    //Tolerance between target and agent
-    [SerializeField] private float threshold = 0.5f;
+    [SerializeField] private NavMeshAgent _agent;
+    [SerializeField] private PatrolRoute _patrolRoute;
+    [SerializeField] private float _threshold = 0.5f;    //Tolerance between target and agent
     
     private bool _moving = false;
     private Transform _currentPoint;
-    
-    
+    private int _routeIndex = 0;
+    private bool _forwardAlongPath = true;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        _currentPoint = _patrolRoute.route[_routeIndex];
+
     }
 
     // Update is called once per frame
@@ -30,23 +29,48 @@ public class EnemyController : MonoBehaviour
     {
         if (!_moving)
         {
-            if (_currentPoint == point1)
-            {
-                _currentPoint = point2;
-            }
-            else
-            {
-                _currentPoint = point1;
-            }
-            agent.SetDestination(_currentPoint.position);
+            NextPatrolPoint();
+            _agent.SetDestination(_currentPoint.position);
             _moving = true;
         }
 
         
-        if (_moving &&  Vector3.Distance(transform.position, _currentPoint.position)< threshold)
+        if (_moving &&  Vector3.Distance(transform.position, _currentPoint.position)< _threshold)
         {
             _moving = false;
         }
 
+    }
+
+    private void NextPatrolPoint()
+    {
+        _currentPoint = _patrolRoute.route[_routeIndex];
+        
+        if (_forwardAlongPath)
+        {
+            _routeIndex++;    
+        }
+        else
+        {
+            _routeIndex--;
+        }
+        
+        if (_routeIndex == 0)
+        {
+            _forwardAlongPath = true;
+        }
+
+        if (_routeIndex == _patrolRoute.route.Count)
+        {
+            if (_patrolRoute.patrolType == PatrolRoute.PatrolType.Loop)
+            {
+                _routeIndex = 0;    
+            }
+            else if (_patrolRoute.patrolType == PatrolRoute.PatrolType.PingPong)
+            {
+                _forwardAlongPath = false;
+                _routeIndex--;
+            }
+        }
     }
 }
