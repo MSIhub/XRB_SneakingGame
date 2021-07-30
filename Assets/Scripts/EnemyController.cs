@@ -16,11 +16,14 @@ public class EnemyController : MonoBehaviour
     private Transform _currentPoint;
     private int _routeIndex = 0;
     private bool _forwardAlongPath = true;
+    private int _routeCount = 0;
     
     // Start is called before the first frame update
     void Start()
     {
         _currentPoint = _patrolRoute.route[_routeIndex];
+        
+        
 
     }
 
@@ -45,7 +48,32 @@ public class EnemyController : MonoBehaviour
     private void NextPatrolPoint()
     {
         _currentPoint = _patrolRoute.route[_routeIndex];
+        _routeCount = _patrolRoute.route.Count;
+
+        if (_patrolRoute.patrolType == PatrolRoute.PatrolType.Loop)
+        {
+            _routeIndex = (_routeIndex +1) % _routeCount;
+        }
         
+        if (_patrolRoute.patrolType == PatrolRoute.PatrolType.PingPong)
+        {
+            if (_forwardAlongPath)
+            {
+                _routeIndex = (_routeIndex +1) % _routeCount;   
+            }
+            //Reverse the direction when it reaches the last point 
+            if (!_forwardAlongPath | _routeIndex == _routeCount - 1)
+            {
+                if (_routeIndex == 0)
+                {
+                    _forwardAlongPath = true;                    
+                }
+                _forwardAlongPath = false;
+                _routeIndex = (((_routeIndex - 1) % _routeCount) +_routeCount) % _routeCount ;
+            }
+        }
+
+        /*
         if (_forwardAlongPath)
         {
             _routeIndex++;    
@@ -71,6 +99,6 @@ public class EnemyController : MonoBehaviour
                 _forwardAlongPath = false;
                 _routeIndex--;
             }
-        }
+        }*/
     }
 }
