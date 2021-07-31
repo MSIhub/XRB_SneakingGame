@@ -17,8 +17,7 @@ public class EnemyController : MonoBehaviour
 
     private int _routeIndex = 0;
     private int _routeCount = 0;
-    private bool _forwardAlongPath = true;
-    private bool _firstIteration = true;
+    private int _incrementor = 1;
     
     // Start is called before the first frame update
     void Start()
@@ -54,29 +53,33 @@ public class EnemyController : MonoBehaviour
         
         if (_patrolRoute.patrolType == PatrolRoute.PatrolType.PingPong)
         {
-            if (_forwardAlongPath)
+            _routeIndex += _incrementor;    //_routeIndex = _routeIndex + incrementor;
+            if(_routeIndex == 0 || _routeIndex == _routeCount - 1)
             {
-                _routeIndex = (_routeIndex +1) % _routeCount;   
-            }
-            //Reverse the direction when it reaches the last point 
-            if (!_forwardAlongPath | _routeIndex == _routeCount - 1)
-            {
-                _forwardAlongPath = false;
-                if (_firstIteration)
-                {
-                    _firstIteration = false; // to ensure that the last point is visited before returning
-                    return;
-                }
-                _routeIndex = (((_routeIndex - 1) % _routeCount) +_routeCount) % _routeCount ;
-                if (_routeIndex == 0)
-                {
-                    _forwardAlongPath = true;
-                    _firstIteration = true;
-                }
+                _incrementor *= -1;    //incrementor = incrementor * -1;
             }
         }
     }
 }
+
+/*
+//Reverse the direction when it reaches the last point 
+if (!_forwardAlongPath | _routeIndex == _routeCount - 1)
+{
+    _forwardAlongPath = false;
+    if (_firstIteration)
+    {
+        _firstIteration = false; // to ensure that the last point is visited before returning
+        return;
+    }
+    _routeIndex = (((_routeIndex - 1) % _routeCount) +_routeCount) % _routeCount ;
+    if (_routeIndex == 0)
+    {
+        _forwardAlongPath = true;
+        _firstIteration = true;
+    }
+}
+*/
 
 /*
 if (_forwardAlongPath)

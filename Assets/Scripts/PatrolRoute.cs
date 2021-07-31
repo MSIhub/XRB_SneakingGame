@@ -15,7 +15,7 @@ namespace Assets.Scripts
             PingPong = 1
         }
 
-        [SerializeField] private Color _patrolRouteColor;
+        [SerializeField] private Color _patrolRouteColor = Color.green;
         public PatrolType patrolType;
         public List<Transform> route;
         
@@ -50,11 +50,7 @@ namespace Assets.Scripts
             #if UNITY_EDITOR //Build only on Unity Editor 
                         Handles.Label(transform.position, gameObject.name); //Handle is a unity editor script
             #endif
-        }
-
-        //draws in the gizmos in the scene mode 
-        private void OnDrawGizmosSelected()
-        {
+            
             Gizmos.color = _patrolRouteColor;
 
             for (int i = 0; i < route.Count-1; i++)
