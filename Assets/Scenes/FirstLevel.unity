@@ -52818,6 +52818,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2810159089353291344, guid: cd44f402f261aeb4c997e4013ddd97c9, type: 3}
+      propertyPath: _fov
+      value: 
+      objectReference: {fileID: 1425376290}
+    - target: {fileID: 2810159089353291344, guid: cd44f402f261aeb4c997e4013ddd97c9, type: 3}
       propertyPath: _patrolRoute
       value: 
       objectReference: {fileID: 639159942}
