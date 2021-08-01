@@ -62,7 +62,7 @@ public class EnemyController : MonoBehaviour
 
     private void UpdateInvestigate()
     {
-        Debug.Log("Investigating");
+        //Debug.Log("Investigating");
         if (Vector3.Distance(transform.position, _investigationPoint) < _threshold)
         {
             _waitTimer += Time.deltaTime;
