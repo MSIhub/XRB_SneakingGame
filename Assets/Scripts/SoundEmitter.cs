@@ -8,6 +8,7 @@ public class SoundEmitter : MonoBehaviour
 {
     private AudioSource _audioSource;
     [SerializeField] private float _soundRadius = 5f;
+    [SerializeField] private float _impulseThreshold = 2f;
     
     // Start is called before the first frame update
     void Start()
@@ -23,12 +24,17 @@ public class SoundEmitter : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        Collider[] _colliders = Physics.OverlapSphere(transform.position, _soundRadius);
-        foreach (var col in _colliders)
+        if (other.impulse.magnitude > _impulseThreshold || other.gameObject.CompareTag("Player"))
         {
-            if (col.TryGetComponent(out EnemyController enemyController))
+            _audioSource.Play(); // play the sound from the source
+            Debug.Log("Sound Emitter Collided with "+ other.gameObject.name);
+            Collider[] _colliders = Physics.OverlapSphere(transform.position, _soundRadius);
+            foreach (var col in _colliders)
             {
-                enemyController.InvestigatePoint(transform.position);
+                if (col.TryGetComponent(out EnemyController enemyController))
+                {
+                    enemyController.InvestigatePoint(transform.position);
+                }
             }
         }
     }

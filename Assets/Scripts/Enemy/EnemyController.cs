@@ -55,6 +55,7 @@ public class EnemyController : MonoBehaviour
 
     public void InvestigatePoint(Vector3 investigatePoint)
     {
+        //Debug.Log("Investatige Point triggered");
         _state = EnemyState.Investigate;
         _investigationPoint = investigatePoint;
         _agent.SetDestination(_investigationPoint);
@@ -76,6 +77,7 @@ public class EnemyController : MonoBehaviour
 
     private void ReturnToPatrol()
     {
+        Debug.Log("Returning to patrol");
         _state = EnemyState.Patrol;
         _waitTimer = 0;
         _moving = false;
