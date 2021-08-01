@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1043771342883515738}
   - component: {fileID: 1043771342883515739}
   - component: {fileID: 1043771342883515736}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -322,7 +322,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1043771342983632268}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TDoor_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
