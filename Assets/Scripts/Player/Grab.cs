@@ -55,6 +55,12 @@ public class Grab : MonoBehaviour
     {
         if (!_grabbedObject) return;
         _grabbedObject.AddForce(_cameraPostion.forward * _throwForce, ForceMode.Impulse);
+        StickOnThrow stickObject = _grabbedObject.GetComponentInParent<StickOnThrow>();
+        if (stickObject != null)
+        {
+            stickObject.triggerSticking = true;
+        }
         DropGrabbedObject();
+       
     }
 }
