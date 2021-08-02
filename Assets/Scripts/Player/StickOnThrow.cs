@@ -11,8 +11,7 @@ public class StickOnThrow : MonoBehaviour
     {
         if (triggerSticking)
         {
-            transform.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-            Debug.Log("IsKinematic");
+            transform.gameObject.GetComponent<Rigidbody>().isKinematic = true;//removes the physics
         }
     }
 }
