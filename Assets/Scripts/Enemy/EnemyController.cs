@@ -11,7 +11,8 @@ public class EnemyController : MonoBehaviour
     enum EnemyState
     {
         Patrol = 0,
-        Investigate = 1 
+        Investigate = 1,
+        CallBackup =2
     }
     
     [SerializeField] private NavMeshAgent _agent;
@@ -20,6 +21,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private PatrolRoute _patrolRoute;
     [SerializeField] private FieldOfView _fov;
     [SerializeField] private EnemyState _state = EnemyState.Patrol;
+    [SerializeField] private Transform _otherRobot;
     
     private bool _moving = false;
     private Transform _currentPoint;
@@ -28,6 +30,7 @@ public class EnemyController : MonoBehaviour
     private int _incrementor = 1;
     private Vector3 _investigationPoint;
     private float _waitTimer = 0f;
+    private Vector3 _offsetToRobot = Vector3.back;
     
     // Start is called before the first frame update
     void Start()
@@ -42,6 +45,7 @@ public class EnemyController : MonoBehaviour
         {
             InvestigatePoint(_fov.visibleObjects[0].position);
         }
+
         if (_state == EnemyState.Patrol)
         {
             UpdatePatrol();    
@@ -50,7 +54,18 @@ public class EnemyController : MonoBehaviour
         {
             UpdateInvestigate();
         }
+        else if (_state == EnemyState.CallBackup)
+        {
+            UpdateCallBackup();
+        }
         
+    }
+    
+    
+    public void CallBackup(Vector3 investigatePoint)
+    {
+        _state = EnemyState.CallBackup;
+        _investigationPoint = investigatePoint;
     }
 
     public void InvestigatePoint(Vector3 investigatePoint)
@@ -60,6 +75,28 @@ public class EnemyController : MonoBehaviour
         _investigationPoint = investigatePoint;
         _agent.SetDestination(_investigationPoint);
     }
+
+    private void UpdateCallBackup()
+    {
+        Debug.Log("Call Backup triggered");
+        //visit and call other robot
+        _agent.SetDestination(_otherRobot.position - _offsetToRobot);
+        //if both the robots are close enough, then trigger investigation for both the robots
+        if (Vector3.Distance(transform.position, _otherRobot.position) < _threshold)
+        {
+            if (_otherRobot.gameObject.TryGetComponent(out EnemyController enemyController))
+            {
+                enemyController.InvestigatePoint(_investigationPoint - _offsetToRobot);
+            }
+            else
+            {
+                Debug.Log("Your backup is not part of your team!");
+            }
+            
+            InvestigatePoint(_investigationPoint);
+        }
+    }
+
 
     private void UpdateInvestigate()
     {

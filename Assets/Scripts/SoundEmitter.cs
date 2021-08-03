@@ -33,7 +33,8 @@ public class SoundEmitter : MonoBehaviour
             {
                 if (col.TryGetComponent(out EnemyController enemyController))
                 {
-                    enemyController.InvestigatePoint(transform.position);
+                    //enemyController.InvestigatePoint(transform.position);
+                    enemyController.CallBackup(transform.position);
                 }
             }
         }
