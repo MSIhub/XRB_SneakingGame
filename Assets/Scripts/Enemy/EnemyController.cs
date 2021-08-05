@@ -4,6 +4,7 @@ using Assets.Scripts;
 using Newtonsoft.Json.Bson;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 public class EnemyController : MonoBehaviour
@@ -21,6 +22,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private PatrolRoute _patrolRoute;
     [SerializeField] private FieldOfView _fov;
     [SerializeField] private EnemyState _state = EnemyState.Patrol;
+
+    public UnityEvent<Transform> onPlayerFound;//Take parameters
+    public UnityEvent onInvestigate;
+    public UnityEvent onReturnToPatrol;
     
     private bool _moving = false;
     private Transform _currentPoint;
@@ -61,9 +66,21 @@ public class EnemyController : MonoBehaviour
     public void InvestigatePoint(Vector3 investigatePoint)
     {
         //Debug.Log("Investatige Point triggered");
+        SetInvestigationPoint(investigatePoint);
+        onInvestigate.Invoke();
+    }
+
+    private void SetInvestigationPoint(Vector3 investigatePoint)
+    {
         _state = EnemyState.Investigate;
         _investigationPoint = investigatePoint;
         _agent.SetDestination(_investigationPoint);
+    }
+
+    private void PlayerFound(Vector3 investigatePoint)
+    {
+        SetInvestigationPoint(investigatePoint);
+        onPlayerFound.Invoke(_fov.creature.head);
     }
 
     private void UpdateInvestigate()
@@ -82,10 +99,12 @@ public class EnemyController : MonoBehaviour
 
     private void ReturnToPatrol()
     {
-        Debug.Log("Returning to patrol");
+        //Debug.Log("Returning to patrol");
         _state = EnemyState.Patrol;
         _waitTimer = 0;
         _moving = false;
+        
+        onReturnToPatrol.Invoke();
     }
 
     private void UpdatePatrol()

@@ -11,8 +11,9 @@ public class FieldOfView : MonoBehaviour
     [SerializeField] private Color _gizmoColor = Color.red;
     [SerializeField] private float _viewRadius = 6f;//degree
     [SerializeField] private float _viewAngle = 30f;
-    [SerializeField] private Creature _creature;
     [SerializeField] private LayerMask _blockingLayers;
+    
+    public Creature creature;
     
     // Start is called before the first frame update
     void Start()
@@ -28,11 +29,11 @@ public class FieldOfView : MonoBehaviour
         foreach (Collider target in targetsInViewRadius)
         {
             if (!target.TryGetComponent<Creature>(out Creature targetCreature)) continue;
-            if (_creature.team == targetCreature.team) continue; // ensuring the robot is not detecting himself
+            if (creature.team == targetCreature.team) continue; // ensuring the robot is not detecting himself
             Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, directionToTarget) < _viewAngle) //Vector.Angle returns unsigned float
             {
-                Vector3 headPos = _creature.head.position;
+                Vector3 headPos = creature.head.position;
                 Vector3 targetHeadPos = targetCreature.head.position;
 
                 Vector3 dirToTargetHead = (targetHeadPos - headPos).normalized;
