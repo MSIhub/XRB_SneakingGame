@@ -7,6 +7,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(AudioSource))]
 public class StickOnThrow : MonoBehaviour
 {
     public enum StickOnThrowFunction
@@ -22,6 +23,7 @@ public class StickOnThrow : MonoBehaviour
     [SerializeField] private EnemyController _robotToRagdoll;
     [SerializeField] private StickOnThrowFunction _throwFunction = StickOnThrowFunction.Explode;
 
+    private AudioSource _audioSource;
     private Rigidbody _mineObject;
     private Vector3 _meanContactPoint;
     private bool _stuckToWall = false;
@@ -29,8 +31,10 @@ public class StickOnThrow : MonoBehaviour
     private ContactPoint[] _contactPoints = new ContactPoint[6]; //Maximum of 6 vertices to the face
     private void Start()
     {
+        _audioSource = GetComponent<AudioSource>();
         _particleEffect.SetActive(false);
         _mineObject = this.GetComponent<Rigidbody>();
+        
     }
 
     private void Update()
@@ -57,12 +61,13 @@ public class StickOnThrow : MonoBehaviour
 
     private void ExplodeCreature(Creature targetCreature)
     {
+        _audioSource.Play(); 
         Transform objTransform = transform;
         _particleEffect.transform.position = objTransform.position;
         _particleEffect.transform.rotation = objTransform.rotation;
+        _particleEffect.transform.localScale = new Vector3(5f, 5f, 5f);
         _particleEffect.SetActive(true);
         targetCreature.transform.gameObject.SetActive(false);
-
     }
 
     private void OnCollisionEnter(Collision other)
