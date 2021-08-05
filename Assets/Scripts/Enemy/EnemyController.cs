@@ -11,7 +11,8 @@ public class EnemyController : MonoBehaviour
     enum EnemyState
     {
         Patrol = 0,
-        Investigate = 1 
+        Investigate = 1,
+        Ragdoll = 2
     }
     
     [SerializeField] private NavMeshAgent _agent;
@@ -54,9 +55,13 @@ public class EnemyController : MonoBehaviour
         {
             UpdateInvestigate();
         }
+        else if (_state == EnemyState.Ragdoll)
+        {
+            this.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+            this.gameObject.GetComponent<Rigidbody>().useGravity = false;
+        }
         
     }
-    
     
     public void DoRagdoll(bool isRagdoll)
     {
@@ -64,10 +69,22 @@ public class EnemyController : MonoBehaviour
         {
             if (col.gameObject != this.gameObject)
             {
-                Rigidbody rigidbody =col.attachedRigidbody; 
-                rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-                rigidbody.isKinematic = !isRagdoll;
-                col.enabled = isRagdoll;
+                if (isRagdoll)
+                {
+                    Debug.Log("Enemy idle");
+                    _state = EnemyState.Ragdoll;
+                    col.enabled = isRagdoll;
+                    Rigidbody rigidbody =col.attachedRigidbody; 
+                    rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                    rigidbody.isKinematic = !isRagdoll;
+                }
+                else
+                {
+                    Rigidbody rigidbody =col.attachedRigidbody; 
+                    rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                    rigidbody.isKinematic = !isRagdoll;
+                    col.enabled = isRagdoll;
+                }
             }
         }
 
@@ -86,10 +103,14 @@ public class EnemyController : MonoBehaviour
 
     public void InvestigatePoint(Vector3 investigatePoint)
     {
-        //Debug.Log("Investatige Point triggered");
-        _state = EnemyState.Investigate;
-        _investigationPoint = investigatePoint;
-        _agent.SetDestination(_investigationPoint);
+        if (_state != EnemyState.Ragdoll)
+        {
+            //Debug.Log("Investatige Point triggered");
+            _state = EnemyState.Investigate;
+            _investigationPoint = investigatePoint;
+            _agent.SetDestination(_investigationPoint);    
+        }
+        
     }
     private void SetRagdollParts()
     {
@@ -103,11 +124,16 @@ public class EnemyController : MonoBehaviour
         //Debug.Log("Investigating");
         if (Vector3.Distance(transform.position, _investigationPoint) < _threshold)
         {
-            _waitTimer += Time.deltaTime;
-            if (_waitTimer > _waitTime)
+            if (_state != EnemyState.Ragdoll)
             {
-                ReturnToPatrol();
+                Debug.Log("In Update Investagatin Not IDLE");
+                _waitTimer += Time.deltaTime;
+                if (_waitTimer > _waitTime)
+                {
+                    ReturnToPatrol();
+                }    
             }
+            
         }
         
     }

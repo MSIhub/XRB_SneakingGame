@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector.Editor;
 using Unity.Mathematics;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -8,11 +9,19 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class StickOnThrow : MonoBehaviour
 {
+    public enum StickOnThrowFunction
+    {
+        Explode = 0,
+        Ragdoll =1
+    }
+    
     public bool triggerSticking = false;
     [SerializeField] private GameObject _particleEffect;
     [SerializeField] private float _bombRange = 5.0f;
     [SerializeField] private float _angleToSnap = 90.0f;
-    
+    [SerializeField] private EnemyController _robotToRagdoll;
+    [SerializeField] private StickOnThrowFunction _throwFunction = StickOnThrowFunction.Explode;
+
     private Rigidbody _mineObject;
     private Vector3 _meanContactPoint;
     private bool _stuckToWall = false;
@@ -33,19 +42,18 @@ public class StickOnThrow : MonoBehaviour
         { 
             if (targetCreature.team == Creature.Team.Enemy)
             {
-                //ExplodeCreature(targetCreature);
-                ActivateRoboRagdoll(targetCreature);
+                if (_throwFunction == StickOnThrowFunction.Explode)
+                {
+                    ExplodeCreature(targetCreature);  
+                }
+                else if (_throwFunction == StickOnThrowFunction.Ragdoll)
+                {
+                    _robotToRagdoll.DoRagdoll(true);
+                }
             }
         }
     }
-
-    private static void ActivateRoboRagdoll(Creature targetCreature)
-    {
-        if (targetCreature.transform.gameObject.TryGetComponent<EnemyController>(out EnemyController enemyController))
-        {
-            enemyController.DoRagdoll(true);
-        }
-    }
+    
 
     private void ExplodeCreature(Creature targetCreature)
     {

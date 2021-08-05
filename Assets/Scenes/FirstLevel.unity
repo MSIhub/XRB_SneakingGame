@@ -4063,6 +4063,9 @@ MonoBehaviour:
   triggerSticking: 0
   _particleEffect: {fileID: 578031418}
   _bombRange: 5.21
+  _angleToSnap: 90
+  _robotToRagdoll: {fileID: 1425376295}
+  _throwFunction: 1
 --- !u!54 &483360213
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4414,7 +4417,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 739655587}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37.025, y: 2, z: -73.925}
+  m_LocalPosition: {x: 37.225002, y: 2, z: -74}
   m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
   m_Children:
   - {fileID: 483360211}
@@ -8674,6 +8677,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   head: {fileID: 2810159090771784308}
+--- !u!114 &1425376295 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2810159089353291344, guid: cd44f402f261aeb4c997e4013ddd97c9, type: 3}
+  m_PrefabInstance: {fileID: 2810159090771784307}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1425376289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 699a33833c6277a43b612abb18e526f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1545527371 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 937451010987979973, guid: 035bf1ba97d19214580cfe6f5a29fdc3, type: 3}
@@ -54805,6 +54819,10 @@ PrefabInstance:
       propertyPath: _fov
       value: 
       objectReference: {fileID: 1425376290}
+    - target: {fileID: 2810159089353291344, guid: cd44f402f261aeb4c997e4013ddd97c9, type: 3}
+      propertyPath: _state
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2810159089353291344, guid: cd44f402f261aeb4c997e4013ddd97c9, type: 3}
       propertyPath: m_Enabled
       value: 1
