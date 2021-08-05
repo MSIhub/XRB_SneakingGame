@@ -15,6 +15,7 @@ public class EnemyController : MonoBehaviour
     }
     
     [SerializeField] private NavMeshAgent _agent;
+    [SerializeField] private Animator _animator;
     [SerializeField] private float _threshold = 0.5f;   //Tolerance between target and agent
     [SerializeField] private float _waitTime = 2f;
     [SerializeField] private PatrolRoute _patrolRoute;
@@ -38,6 +39,8 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _animator.SetFloat("Speed", _agent.velocity.magnitude);
+            
         if (_fov.visibleObjects.Count > 0)
         {
             InvestigatePoint(_fov.visibleObjects[0].position);
@@ -50,6 +53,8 @@ public class EnemyController : MonoBehaviour
         {
             UpdateInvestigate();
         }
+        
+        
         
     }
 
