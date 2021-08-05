@@ -20,6 +20,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private PatrolRoute _patrolRoute;
     [SerializeField] private FieldOfView _fov;
     [SerializeField] private EnemyState _state = EnemyState.Patrol;
+
+    [SerializeField] private Collider _mainEnemyCollider;
+    [SerializeField] private Collider[] _ragdollColliders;
     
     private bool _moving = false;
     private Transform _currentPoint;
@@ -32,6 +35,7 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetRagdollParts();
         _currentPoint = _patrolRoute.route[_routeIndex];
     }
 
@@ -52,6 +56,33 @@ public class EnemyController : MonoBehaviour
         }
         
     }
+    
+    
+    public void DoRagdoll(bool isRagdoll)
+    {
+        foreach (var col in _ragdollColliders)
+        {
+            if (col.gameObject != this.gameObject)
+            {
+                Rigidbody rigidbody =col.attachedRigidbody; 
+                rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+                rigidbody.isKinematic = !isRagdoll;
+                col.enabled = isRagdoll;
+            }
+        }
+
+        _mainEnemyCollider.enabled = !isRagdoll;
+
+        if (TryGetComponent<Rigidbody>(out Rigidbody _mainEnemyRigidBody))
+        {
+            _mainEnemyRigidBody.useGravity = !isRagdoll;
+        }
+
+        if (TryGetComponent<Animation>(out Animation animation))
+        {
+            animation.enabled = !isRagdoll;
+        }
+    }
 
     public void InvestigatePoint(Vector3 investigatePoint)
     {
@@ -59,6 +90,12 @@ public class EnemyController : MonoBehaviour
         _state = EnemyState.Investigate;
         _investigationPoint = investigatePoint;
         _agent.SetDestination(_investigationPoint);
+    }
+    private void SetRagdollParts()
+    {
+        _mainEnemyCollider = GetComponent<Collider>();
+        _ragdollColliders = GetComponentsInChildren<Collider>(true);
+        DoRagdoll(false);
     }
 
     private void UpdateInvestigate()
@@ -117,6 +154,8 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+
+
 }
 
 
