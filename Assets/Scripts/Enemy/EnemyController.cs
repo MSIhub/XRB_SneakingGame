@@ -48,7 +48,7 @@ public class EnemyController : MonoBehaviour
             
         if (_fov.visibleObjects.Count > 0)
         {
-            InvestigatePoint(_fov.visibleObjects[0].position);
+            PlayerFound(_fov.visibleObjects[0].position);
         }
         if (_state == EnemyState.Patrol)
         {

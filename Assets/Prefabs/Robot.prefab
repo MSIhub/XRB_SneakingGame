@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 2810159089353291350}
   - component: {fileID: 2810159089353291349}
   - component: {fileID: 2810159089353291348}
+  - component: {fileID: 1425376290}
+  - component: {fileID: 1425376291}
   m_Layer: 0
   m_Name: Robot
   m_TagString: Untagged
@@ -28,7 +30,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2810159089353291346}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 43.5, y: 1.9925647, z: -68}
   m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_Children:
@@ -49,7 +51,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 300
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -71,8 +73,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _agent: {fileID: 2810159089353291351}
+  _animator: {fileID: 2810159090771784310}
+  _threshold: 1
+  _waitTime: 2
   _patrolRoute: {fileID: 0}
-  _threshold: 0.5
+  _fov: {fileID: 1425376290}
+  _state: 0
+  onPlayerFound:
+    m_PersistentCalls:
+      m_Calls: []
+  onInvestigate:
+    m_PersistentCalls:
+      m_Calls: []
+  onReturnToPatrol:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &2810159089353291350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +130,59 @@ CapsuleCollider:
   m_Height: 1.79
   m_Direction: 1
   m_Center: {x: 0, y: 0.91, z: 0}
+--- !u!114 &1425376290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2810159089353291346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a12ebd15fb62ef46825ba66d8c30c77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visibleObjects: []
+  _gizmoColor: {r: 1, g: 0, b: 0, a: 1}
+  _viewRadius: 6.78
+  _viewAngle: 30
+  _blockingLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  creature: {fileID: 1425376291}
+--- !u!114 &1425376291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2810159089353291346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd0d0b42b24e4e4e8ce462cc4f5468e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 1
+  head: {fileID: 1305760084989584701}
+--- !u!95 &2810159090771784310
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3044109112947073349}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 151a113bb5dbeef48864a159e7551ce7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &2810159091223125012
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -188,8 +256,18 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 26a32c5505918b841874277b6fff4566, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a9d93cff62d515a41a6f79c5f3931e3b, type: 3}
+--- !u!1 &3044109112947073349 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a9d93cff62d515a41a6f79c5f3931e3b, type: 3}
+  m_PrefabInstance: {fileID: 2810159091223125012}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2410843829261122559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a9d93cff62d515a41a6f79c5f3931e3b, type: 3}
+  m_PrefabInstance: {fileID: 2810159091223125012}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1305760084989584701 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -5412960421705385687, guid: a9d93cff62d515a41a6f79c5f3931e3b, type: 3}
   m_PrefabInstance: {fileID: 2810159091223125012}
   m_PrefabAsset: {fileID: 0}
