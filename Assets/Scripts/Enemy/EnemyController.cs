@@ -34,6 +34,7 @@ public class EnemyController : MonoBehaviour
     private int _incrementor = 1;
     private Vector3 _investigationPoint;
     private float _waitTimer = 0f;
+    private bool _playerFound = false;
     
     // Start is called before the first frame update
     void Start()
@@ -79,8 +80,10 @@ public class EnemyController : MonoBehaviour
 
     private void PlayerFound(Vector3 investigatePoint)
     {
+        if (_playerFound) return;
         SetInvestigationPoint(investigatePoint);
         onPlayerFound.Invoke(_fov.creature.head);
+        _playerFound = true;
     }
 
     private void UpdateInvestigate()

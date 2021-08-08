@@ -32,7 +32,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 32.417595, y: 3.2, z: -68.8}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
-  m_Children: []
+  m_Children:
+  - {fileID: 4686173213814606933}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -222,5 +223,87 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2293003ae38ebb47b7ec8f37b906032, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _onEmit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 9091337882107461609}
+        m_TargetAssemblyTypeName: UnityEngine.ParticleSystem, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _soundRadius: 10
   _impulseThreshold: 0.1
+--- !u!1001 &6981958324509557563
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 9089837672367042156}
+    m_Modifications:
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111284069207525597, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+      propertyPath: m_Name
+      value: SoundRingParticleSystem
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+--- !u!4 &4686173213814606933 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2444407514929270638, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+  m_PrefabInstance: {fileID: 6981958324509557563}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &9091337882107461609 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 2219726752092552402, guid: 9d88de5af235c864f9b4e77499e70c87, type: 3}
+  m_PrefabInstance: {fileID: 6981958324509557563}
+  m_PrefabAsset: {fileID: 0}
