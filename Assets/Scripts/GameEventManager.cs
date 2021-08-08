@@ -18,11 +18,13 @@ namespace DefaultNamespace
         [Header("Audio")] 
         [SerializeField] private AudioSource _bgmSource;
         [SerializeField] private AudioClip _caughtMusic;
+        [SerializeField] private AudioClip _successMusic;
         
         private PlayerInput _playerInput;
         private FirstPersonController _fpController;
         private bool _isFadingIn = false;
         private float _fadeLevel = 0f;
+        private bool _isGoalReached = false;
 
         private void Start()
         {
@@ -45,6 +47,12 @@ namespace DefaultNamespace
                 Debug.LogWarning("There is no player in the scene");
             }
             
+            
+            //Setting the fail and success canvas to not show on the start of the game
+            _canvasGroup.alpha = 0; 
+            _failedPanel.SetActive(false);
+            _successPanel.SetActive(false);
+
         }
 
         private void EnemyReturnToPatrol()
@@ -52,14 +60,27 @@ namespace DefaultNamespace
             
         }
 
-        private void PlayerFound(Transform enemyThatFoundPlayer)
+        private void PlayerFound(Transform enemyThatFoundPlayer)//mission failed method
         {
+            if (_isGoalReached) return;
             _isFadingIn = true;
+            _failedPanel.SetActive(true);
             // if player found, making the player look at the enemy
             _fpController.CinemachineCameraTarget.transform.LookAt(enemyThatFoundPlayer);
             DeactivateInput();
             PlayBGM(_caughtMusic);
         }
+        
+        public void GoalReached()//mission success method
+        {
+            _isFadingIn = true;
+            _isGoalReached = true;
+            _successPanel.SetActive(true);
+            DeactivateInput();
+            PlayBGM(_successMusic);
+        }
+        
+        
 
         private void DeactivateInput()
         {
@@ -68,6 +89,7 @@ namespace DefaultNamespace
             //unlock the cursor
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+
         }
 
         private void PlayBGM(AudioClip newBgm)
@@ -84,6 +106,9 @@ namespace DefaultNamespace
 
         public void RestartScene()
         {
+            //unlock the cursor
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 

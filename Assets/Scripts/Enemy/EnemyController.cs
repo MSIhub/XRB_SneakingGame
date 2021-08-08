@@ -86,6 +86,7 @@ public class EnemyController : MonoBehaviour
     private void UpdateInvestigate()
     {
         //Debug.Log("Investigating");
+        //TODO : The robot needs at time out in case it could not reach that particular point.(UC: Ball on the top layer)
         if (Vector3.Distance(transform.position, _investigationPoint) < _threshold)
         {
             _waitTimer += Time.deltaTime;

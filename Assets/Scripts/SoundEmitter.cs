@@ -9,6 +9,8 @@ public class SoundEmitter : MonoBehaviour
     private AudioSource _audioSource;
     [SerializeField] private float _soundRadius = 5f;
     [SerializeField] private float _impulseThreshold = 2f;
+
+    private float _collisionTimer = 0f;
     
     // Start is called before the first frame update
     void Start()
@@ -19,11 +21,15 @@ public class SoundEmitter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (_collisionTimer<2f)
+        {
+            _collisionTimer += Time.deltaTime;
+        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        if (_collisionTimer < 2f) return;
         if (other.impulse.magnitude > _impulseThreshold || other.gameObject.CompareTag("Player"))
         {
             _audioSource.Play(); // play the sound from the source
