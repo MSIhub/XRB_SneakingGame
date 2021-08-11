@@ -13,6 +13,12 @@ namespace DefaultNamespace
 
         private void Start()
         {
+            //ActivateRobotExplosion();
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            if (!other.gameObject.CompareTag("Grabbable")) return;
             ActivateRobotExplosion();
         }
 
