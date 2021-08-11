@@ -1,21 +1,25 @@
 using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
     public class ExplodeRobot : MonoBehaviour
     {
-        [SerializeField] private Transform _objectToExplode;
-        [SerializeField] private float _ExplodeForceIntensity;
-        private Rigidbody _cloneObject;
+        [SerializeField] private GameObject _destroyedGameObject;
+        //[SerializeField] private float _explodeForceIntensity = 10.0f;
+        
+
         private void Start()
         {
-            for (int i = 0; i < 10; i++)
-            {
-              _cloneObject = Instantiate(_objectToExplode, transform.position + new Vector3(0, i* 1.0f, 0), Quaternion.identity, transform.parent).GetComponent<Rigidbody>();
-              _cloneObject.AddForce(_ExplodeForceIntensity*_cloneObject.transform.up, ForceMode.Impulse);
-            }
+            ActivateRobotExplosion();
         }
 
+        public void ActivateRobotExplosion()
+        {
+            GameObject go = Instantiate(_destroyedGameObject, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
     }
 }

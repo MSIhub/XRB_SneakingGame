@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Grab : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class Grab : MonoBehaviour
     [SerializeField] private float _snapSpeed = 20f;
 
 
+    public UnityEvent ActionOnThrow;
     private Rigidbody _grabbedObject;
     private bool _grabPressed = false;
     
@@ -55,6 +57,8 @@ public class Grab : MonoBehaviour
     {
         if (!_grabbedObject) return;
         _grabbedObject.AddForce(_cameraPostion.forward * _throwForce, ForceMode.Impulse);
+        ActionOnThrow.Invoke();
         DropGrabbedObject();
+        
     }
 }

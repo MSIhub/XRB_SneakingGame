@@ -39,6 +39,7 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (_patrolRoute ==null) return;//Null check for patrol route
         _currentPoint = _patrolRoute.route[_routeIndex];
     }
 
@@ -53,6 +54,7 @@ public class EnemyController : MonoBehaviour
         }
         if (_state == EnemyState.Patrol)
         {
+            if (_patrolRoute ==null) return;//Null check for patrol route
             UpdatePatrol();    
         }
         else if (_state == EnemyState.Investigate)
