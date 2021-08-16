@@ -5,7 +5,7 @@ using UnityEngine.AI;
 namespace UAV
 {
     [RequireComponent(typeof(Rigidbody))]
-   // [RequireComponent(typeof(NavMeshAgent))]
+    //[RequireComponent(typeof(NavMeshAgent))]
     public class UAVController : MonoBehaviour
     {
         [Header("UAV Config")]
@@ -13,42 +13,67 @@ namespace UAV
         [SerializeField] private Transform _rotor2;
         [SerializeField] private Transform _rotor3;
         [SerializeField] private Transform _rotor4;
-
-        [SerializeField] private float _thrustTakeOff = 98.1f;
+        //TODO: Get rotor in a list
         
-        [Header("Path Information")]
+        [Header("Input")]
+        [SerializeField] private float _thrustTakeOff = 98.1f;
+        [SerializeField] private float _thrustMove = 10.0f;
+        
+        [Header("Target")]
         [SerializeField] private Transform _targetPose;
         
         private Rigidbody _droneRigidBody;
-        private NavMeshAgent _navMeshAgent;
-        
+        private NavMeshPath _pathNavMesh;
+        private float _elapsed = 0.0f;
+        private int _index = 0;
+        private Vector3 _forceDir = Vector3.zero;
 
-        private void Awake()
+
+        private void Start()
         {
-            if (_droneRigidBody.TryGetComponent<Rigidbody>(out _droneRigidBody))
+            if (gameObject.TryGetComponent<Rigidbody>(out _droneRigidBody))
             {
                 _thrustTakeOff = _droneRigidBody.mass * 9.81f;    
             }
             
-            _navMeshAgent = GetComponent<NavMeshAgent>();
+            _pathNavMesh = new NavMeshPath();
+            _elapsed = 0.0f;
         }
 
-        // Update is called once per frame
-        void FixedUpdate()
+        void Update()
         {
-            //DroneMovement();
-            _droneRigidBody.AddRelativeForce(Vector3.up * _thrustTakeOff, ForceMode.Force);
-        }
+            // Update the way to the goal every second.
+            _elapsed += Time.deltaTime;
+            if (_elapsed > 1.0f)
+            {
+                _elapsed -= 1.0f;
+                NavMesh.CalculatePath(transform.position, _targetPose.position, NavMesh.AllAreas, _pathNavMesh);
+            }
+            
+            for (int i = 0; i < _pathNavMesh.corners.Length -1; i++)
+            {
+                Debug.DrawLine(_pathNavMesh.corners[i], _pathNavMesh.corners[i + 1], Color.red);
+            }
 
+            if (_pathNavMesh.status != NavMeshPathStatus.PathComplete) return;
+            _forceDir = ( _pathNavMesh.corners[1] -  _pathNavMesh.corners[0]).normalized;
+            _droneRigidBody.AddRelativeForce(_forceDir * _thrustMove, ForceMode.Impulse);
+            
+
+
+        }
+        
         private void DroneMovement()
         {
-            _droneRigidBody.AddForceAtPosition(transform.up * _thrustUp,_rotor1.position, ForceMode.VelocityChange);
+            /*_droneRigidBody.AddForceAtPosition(transform.up * _thrustUp,_rotor1.position, ForceMode.VelocityChange);
             _droneRigidBody.AddForceAtPosition(transform.up * _thrustUp,_rotor2.position, ForceMode.VelocityChange);
             _droneRigidBody.AddForceAtPosition(transform.up * _thrustUp, _rotor3.position * 20, ForceMode.Impulse);
-            _droneRigidBody.AddForceAtPosition(transform.up * _thrustUp, _rotor4.position * 20, ForceMode.Impulse);
+            _droneRigidBody.AddForceAtPosition(transform.up * _thrustUp, _rotor4.position * 20, ForceMode.Impulse);*/
 
 
-            // _navMeshAgent.SetDestination(_targetPose.position); //Moves the agent to the target location
+           // _navMeshAgent.SetDestination(_targetPose.position); //Moves the agent to the target location
         }
+    
+
     }
 }

@@ -11,8 +11,8 @@ NavMeshProjectSettings:
     cost: 1
   - name: Jump
     cost: 2
-  - name: Hover
-    cost: 3
+  - name: 
+    cost: 1
   - name: 
     cost: 1
   - name: 
@@ -91,7 +91,7 @@ NavMeshProjectSettings:
       m_Flags: 0
   - serializedVersion: 2
     agentTypeID: -1372625422
-    agentRadius: 0.5
+    agentRadius: 0.7
     agentHeight: 2.75
     agentSlope: 60
     agentClimb: 2
