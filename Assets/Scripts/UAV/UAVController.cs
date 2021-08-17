@@ -134,9 +134,9 @@ namespace UAV
         {
             Vector3 gravity = new Vector3(0.0f, 0.0f, -_g);
             Vector3 thrust = ComputeThrust();
-            RotateZYZEuler_BodyToInertial(_rotation, thrust);
+            Vector3 thrustRot = RotateZYZEuler_BodyToInertial(_rotation, thrust);
             Vector3 dragForce = -_kd * _linVel;
-            return gravity + ( (1 / _m) * (thrust + dragForce));
+            return gravity + ( (1 / _m) * (thrustRot + dragForce));
         }
 
         private Vector3 AngVel2Omega(Vector3 rotation, Vector3 angVel)
