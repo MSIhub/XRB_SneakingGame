@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Grabbable
+  - KeyCard
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Minimap
   - Player
   - Grab
-  - 
+  - Hand
   - 
   - 
   - 
