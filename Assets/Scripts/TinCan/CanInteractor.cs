@@ -1,24 +1,23 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TreeEditor;
 using UnityEngine;
 
-public class CanInteractor : MonoBehaviour
+namespace TinCan
 {
-    public bool canFeel = false;
- 
-    private void OnCollisionEnter(Collision other)
+    public class CanInteractor : MonoBehaviour
     {
-        //Check if the ball hit the can
-        if (!other.gameObject.CompareTag("Grabbable")) return;
-        
-        //Check if the can feel [use rotation]
-        if (transform.localRotation.eulerAngles.x > 5 || transform.localRotation.eulerAngles.z > 5 )
+        public bool canFeel = false;
+ 
+        private void OnCollisionEnter(Collision other)
         {
-            canFeel = true;
+            //Check if the ball hit the can
+            if (!other.gameObject.CompareTag("Grabbable")) return;
+        
+            //Check if the can feel [use rotation]
+            if (transform.localRotation.eulerAngles.x > 5 || transform.localRotation.eulerAngles.z > 5 )
+            {
+                canFeel = true;
+            }
         }
+    
+    
     }
-    
-    
 }
