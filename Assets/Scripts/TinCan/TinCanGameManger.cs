@@ -35,7 +35,7 @@ namespace TinCan
 
             var balls = _ballObjectParent.GetComponentsInChildren<XRGrabInteractable>();
             _totalBalls = balls.Length;
-            Debug.Log(_totalBalls);
+            //Debug.Log(_totalBalls);
         }
 
     
