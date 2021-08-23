@@ -18,7 +18,7 @@ namespace XR
         private void Update()
         {
             Vector3 newRot = new Vector3(0,0 , -_rotationReference.eulerAngles.y) + _initialRotation;
-            transform.rotation = quaternion.Euler(newRot);
+            transform.rotation = Quaternion.Euler(newRot);
         }
     }
 }

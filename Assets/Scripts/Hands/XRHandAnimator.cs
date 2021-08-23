@@ -18,7 +18,6 @@ namespace Hands
             
             _controller.activateAction.action.started += Fist;
             _controller.activateAction.action.canceled += FistReleased;
-            
         }
         
 
