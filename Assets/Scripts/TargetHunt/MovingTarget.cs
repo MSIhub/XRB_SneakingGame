@@ -1,51 +1,65 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class MovingTarget : MonoBehaviour
+namespace TargetHunt
 {
-    [SerializeField] private Transform _startPoint;
-    [SerializeField] private Transform _stopPoint;
-    [SerializeField] private float _speed = 1.5f;
-    private Vector3 _startPosition;
-    private Vector3 _stopPosition;
-    private Vector3 _beginPosition;
-    private Vector3 _cX = Vector3.zero;
-    private Vector3 _dirToMoveBeginStart;
-    private Vector3 _dirToMoveStartStop;
-    private Vector3 _dirToMoveStopStart;
-    private Vector3 _dirToMove;
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class MovingTarget : MonoBehaviour
     {
-        _beginPosition = transform.position;
-        _startPosition = _startPoint.position;
-        _stopPosition = _stopPoint.position;
+        [SerializeField] private Transform _targetToMove;
+        [SerializeField] private Transform _startPoint;
+        [SerializeField] private Transform _stopPoint;
+        [SerializeField] private float _speed = 1.5f;
+        private Vector3 _startPosition;
+        private Vector3 _stopPosition;
+        private Vector3 _beginPosition;
+        private Vector3 _cX = Vector3.zero;
+        private Vector3 _dX = Vector3.zero;
+        private Vector3 _dirToMoveBeginStart;
+        private Vector3 _dirToMoveStartStop;
+        private Vector3 _dirToMoveStopStart;
+        private Vector3 _dirToMove;
 
-        _dirToMoveBeginStart = (_startPosition - _beginPosition).normalized;
-        _dirToMoveStartStop = (_stopPosition - _startPosition).normalized;
-        _dirToMoveStopStart = (_startPosition - _stopPosition).normalized;
-        _dirToMove = _dirToMoveBeginStart;
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        _cX = transform.position; //current position
-        var dX = _dirToMove * _speed * Time.deltaTime; // delta position = vel * deltatime
-        _cX += dX; // current+delta
-        transform.position = _cX;
-        if (Vector3.Distance(transform.position, _startPosition) < 0.1f)
+        // Start is called before the first frame update
+        void Start()
         {
-            _dirToMove = _dirToMoveStartStop;
+            _beginPosition = _targetToMove.position;
+            _startPosition = _startPoint.position;
+            _stopPosition = _stopPoint.position;
+
+            _dirToMoveBeginStart = (_startPosition - _beginPosition).normalized;
+            _dirToMoveStartStop = (_stopPosition - _startPosition).normalized;
+            _dirToMoveStopStart = (_startPosition - _stopPosition).normalized;
+            _dirToMove = _dirToMoveBeginStart;
         }
 
-        if (Vector3.Distance(transform.position, _stopPosition) < 0.1f)
+        // Update is called once per frame
+        void Update()
         {
-            _dirToMove = _dirToMoveStopStart;
+            if (_targetToMove.TryGetComponent<TargetInteract>(out TargetInteract targetInteract))
+            {
+                if (!targetInteract.isHit)
+                {
+                    MoveTargetObject();        
+                }
+            }
+            
+        }
+
+        public void MoveTargetObject()
+        {
+            _cX = _targetToMove.position; //current position
+            _dX = _dirToMove * _speed * Time.deltaTime; // delta position = vel * deltatime
+            _cX += _dX; // current+delta
+            _targetToMove.position = _cX;
+            if (Vector3.Distance(_targetToMove.position, _startPosition) < 0.1f)
+            {
+                _dirToMove = _dirToMoveStartStop;
+            }
+
+            if (Vector3.Distance(_targetToMove.position, _stopPosition) < 0.1f)
+            {
+                _dirToMove = _dirToMoveStopStart;
+            }
         }
     }
 }
