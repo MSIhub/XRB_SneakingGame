@@ -28,7 +28,11 @@ public class FieldOfView : MonoBehaviour
         Collider[] targetsInViewRadius = Physics.OverlapSphere(transform.position, _viewRadius); //overlapped object in a radius
         foreach (Collider target in targetsInViewRadius)
         {
-            if (!target.TryGetComponent<Creature>(out Creature targetCreature)) continue;
+            if (!target.TryGetComponent<Creature>(out Creature targetCreature))
+            { 
+                targetCreature = target.GetComponentInParent<Creature>();
+                if (!targetCreature) continue;
+            }
             if (creature.team == targetCreature.team) continue; // ensuring the robot is not detecting himself
             Vector3 directionToTarget = (target.transform.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, directionToTarget) < _viewAngle) //Vector.Angle returns unsigned float
@@ -49,6 +53,7 @@ public class FieldOfView : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Handles.color = _gizmoColor;
@@ -59,6 +64,7 @@ public class FieldOfView : MonoBehaviour
         Handles.DrawLine(transform.position, transform.position+ (lineA*_viewRadius));
         Handles.DrawLine(transform.position, transform.position+ (lineB*_viewRadius));
     }
+#endif
 }
 
 //Gizmos.color = _gizmoColor;

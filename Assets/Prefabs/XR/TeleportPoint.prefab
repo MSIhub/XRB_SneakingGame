@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 6014268573566149134}
   - component: {fileID: 6014268573566149233}
   - component: {fileID: 6014268573566149232}
-  - component: {fileID: 6014268573566149235}
-  m_Layer: 0
+  - component: {fileID: 6274828912670731916}
+  m_Layer: 11
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -270,8 +270,8 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6014268573566149234}
   m_Mesh: {fileID: 0}
---- !u!64 &6014268573566149235
-MeshCollider:
+--- !u!65 &6274828912670731916
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -280,10 +280,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.40000027, y: 0.30000016, z: 0.40000027}
+  m_Center: {x: 0.20000014, y: 0.15000008, z: -0.19999251}
 --- !u!1 &6014268573844890728
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +293,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6014268573844890729}
   - component: {fileID: 6014268573844890726}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: TeleportPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -330,7 +329,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InteractionManager: {fileID: 0}
   m_Colliders:
-  - {fileID: 6014268573566149235}
+  - {fileID: 6274828912670731916}
   m_InteractionLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
