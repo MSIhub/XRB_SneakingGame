@@ -26,7 +26,7 @@ namespace UAV
         private Rigidbody _droneRigidBody;
         private NavMeshPath _pathNavMesh;
         private float _elapsed = 0.0f;
-        private int _index = 0;
+      //  private int _index = 0;
         private Vector3 _forceDir = Vector3.zero;
         
 
