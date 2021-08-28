@@ -59,6 +59,14 @@ namespace UAV
 
             if (_pathNavMesh.status != NavMeshPathStatus.PathComplete) return;
             _forceDir = (_pathNavMesh.corners[1] - _pathNavMesh.corners[0]).normalized;
+            //Debug.Log(_forceDir);
+            
+            
+            Vector4 rS = Vector4.one*500;
+            rS *= _forceDir.y;
+            Debug.Log(rS);
+            //rS.x *= _forceDir.z;
+            
             _droneRigidBody.AddRelativeForce(_forceDir * _thrustMove, ForceMode.Impulse);
 
            // RigidBodyDynamicsQuadrotors();

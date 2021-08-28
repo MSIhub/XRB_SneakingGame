@@ -12,18 +12,22 @@ namespace UAV
         public Vector3 Rotation { get; set; }
         public Vector3 AngVel { get; set; }
         public Vector3 AngAcc { get; set; }
-
         
     }
     public class UAVRigidBodyDynamics : MonoBehaviour
     {
         [SerializeField] private Transform _drone;
         DroneState drone1;
+
+        private static float R2D = 180f / Mathf.PI;
+        private static float D2R = Mathf.PI/180f;
         
         //Input motor 
-        [SerializeField] private Vector4 _inputRotorSpeed = new Vector4(1f, 1f,1f,1f) * 500f;
+        [SerializeField] private Vector4 _inputRotorSpeed = new Vector4(1f, 2f,1f,4f) *100f;
         private float _m, _g, _k, _kd, _L, _b;
         private float _Ixx, _Iyy, _Izz;
+        private Matrix4x4 Imatrix4;
+        private Matrix4x4 Imatrix4_inv;
         
         //LHF to RHF
         private static readonly Matrix4x4 _TLeft2Right = new Matrix4x4(new Vector4(1f, 0f, 0f,0f),
@@ -44,11 +48,11 @@ namespace UAV
             drone1 = new DroneState
             {
                 Omega = Vector3.zero,
-                Position = _drone.position,
+                Position = _drone.localPosition,
                 LinVel = Vector3.zero,
                 LinAcc = Vector3.zero,
-                Rotation = _drone.rotation.eulerAngles,
-                AngVel = Vector3.zero,
+                Rotation = _drone.parent.localEulerAngles,
+                AngVel = Vector3.one*0.05f,
                 AngAcc = Vector3.zero
             };
 
@@ -56,6 +60,7 @@ namespace UAV
             var (posRhf, rotRhf) = RigidBodyTransformation(_TLeft2Right, drone1.Position, Quaternion.Euler(drone1.Rotation));
             drone1.Position = posRhf;
             drone1.Rotation = rotRhf.eulerAngles;
+            //Debug.Log(drone1.Rotation );
             _m = 10f; //Overall Mass of the drone
             _L = 1f; //Length between the rotor blade center [Assuming the same length]
             _Ixx = 10f;
@@ -64,17 +69,34 @@ namespace UAV
             _g = 9.81f; // Acceleration due to gravity
             _k = 0.1f; //Motor lift constant [Measured value specific to a motor]
             _kd = 0.00005f;
-            _b = 2f; // Drag constant
+            _b = 0.2f;// Drag constant
+            
+            Imatrix4 = new Matrix4x4(new Vector4(_Ixx, 0f, 0f,0f), 
+            new Vector4(0f, _Iyy, 0f,0f), 
+            new Vector4(0f, 0f, _Izz,0f),
+            new Vector4(0f, 0f, 0f,1f));
+
+            if (_Ixx < 0.001 || _Iyy < 0.001 || _Izz < 0.001 )
+            {
+                Debug.LogWarning("Inertia Matrix is too low.");
+            }
+            else
+            {
+                Imatrix4_inv = new Matrix4x4(new Vector4(1/_Ixx, 0f, 0f,0f), 
+                    new Vector4(0f, 1/_Iyy, 0f,0f), 
+                    new Vector4(0f, 0f, 1/_Izz,0f),
+                    new Vector4(0f, 0f, 0f,1f));
+            }
+
 
         }
 
         private void FixedUpdate()
         {
-            var (posLhf, rotLhf) = RigidBodyDynamicsQuadrotors(drone1);
-           _drone.position = posLhf;
-           _drone.rotation = rotLhf;
-          //  Debug.Log(_drone.position);
             
+            var (posLhf, rotLhf) = RigidBodyDynamicsQuadrotors(drone1);
+            _drone.localPosition = posLhf;
+            _drone.parent.rotation *= rotLhf;
         }
         private static (Vector3 temp3, Quaternion temp4) RigidBodyTransformation(Matrix4x4 T, Vector3 pos, Quaternion quat)
         {
@@ -83,11 +105,10 @@ namespace UAV
             temp1.m13 = pos.y;
             temp1.m23 = pos.z;
             temp1.m33 = 1f;
-
+            
             Matrix4x4 temp2 = T * temp1;
-
             Vector3 temp3 = new Vector3(temp2.m03, temp2.m13, temp2.m23);
-            Quaternion temp4 = temp2.rotation;
+            Quaternion temp4 = QuaternionFromMatrix(temp2);
             return (temp3, temp4);
         }
 
@@ -97,18 +118,18 @@ namespace UAV
             droneState.Omega = AngVel2Omega(droneState.Rotation, droneState.AngVel);
             //Compute acceleration
             droneState.LinAcc = ComputeLinearAcceleration(droneState);
-            //Debug.Log( droneState.LinAcc);
             droneState.AngAcc = ComputeAngularAcceleration(droneState);
-            Debug.Log(droneState.AngAcc);
+           
             //Compute drone state
-            droneState.Omega += Time.fixedDeltaTime * droneState.AngAcc; // one shot differentiation
+            droneState.Omega = Time.fixedDeltaTime * droneState.AngAcc; // one shot differentiation
             droneState.AngVel = Omega2AngVel(droneState.Rotation, droneState.Omega);
             droneState.Rotation += Time.fixedDeltaTime * droneState.AngVel;
             
-            droneState.LinVel += Time.fixedDeltaTime * droneState.LinAcc;
-           // Debug.Log(_linVel);
+            droneState.LinVel = Time.fixedDeltaTime * droneState.LinAcc;
             droneState.Position += Time.fixedDeltaTime * droneState.LinVel;
+
             //Make RHF to LHF
+            droneState.Rotation = new Vector3(Mathf.Round(droneState.Rotation.x * 100) / 100, Mathf.Round(droneState.Rotation.y * 100) / 100, Mathf.Round(droneState.Rotation.z * 100) / 100);
             var (posLHF, rotLHF) = RigidBodyTransformation(_TRight2Left, droneState.Position, Quaternion.Euler(droneState.Rotation));
             return (posLHF, rotLHF);
         }
@@ -122,9 +143,9 @@ namespace UAV
              In order to convert these angular velocities into the angular velocity vector, we can use the following relation
              */
             
-            float phi = rotation.x;
-            float theta = rotation.y;
-            float psi = rotation.z;
+            float phi = rotation.x * D2R;
+            float theta = rotation.y * D2R;
+            float psi = rotation.z * D2R;
             
             //Instead of creating 3*3 matrix, I used the 4*4 with zero additional
             Matrix4x4 A2O = Matrix4x4.zero;
@@ -137,9 +158,8 @@ namespace UAV
             A2O[2, 0] = 0f;
             A2O[2, 1] = -Mathf.Sin(phi);
             A2O[2, 2] = Mathf.Cos(theta) * Mathf.Cos(phi);
-            //Debug.Log(A2O);
             Vector4 omega = A2O * new Vector4(angVel.x, angVel.y, angVel.z, 0.0f);
-            return new Vector3(omega.x, omega.y, omega.z);
+            return new Vector3(omega.x * R2D, omega.y * R2D, omega.z* R2D);
         }
         
         private Vector3 ComputeLinearAcceleration(DroneState droneState)
@@ -167,9 +187,9 @@ namespace UAV
             and successively “undoing” the yaw, pitch, and roll.
             For a given vector v in the body frame, the corresponding vector is given by Rv in the inertial frame.
             */
-            float phi = rotation.x;
-            float theta = rotation.y;
-            float psi = rotation.z;
+            float phi = rotation.x * D2R;
+            float theta = rotation.y * D2R;
+            float psi = rotation.z * D2R;
             
             Matrix4x4 R = Matrix4x4.zero;
             R[0, 0] = Mathf.Cos(phi)* Mathf.Cos(psi) - (Mathf.Cos(theta) * Mathf.Sin(phi)* Mathf.Sin(psi));
@@ -187,11 +207,10 @@ namespace UAV
         private Vector3 ComputeAngularAcceleration(DroneState droneState)
         {
             Vector3 tau = ComputeTorque(_inputRotorSpeed);
-            Matrix4x4 I = ComputeInertiaMatrix();
-            Vector4 temp1 = (I * new Vector4(droneState.Omega.x, droneState.Omega.y, droneState.Omega.z, 0f));
-            Vector3 temp2 = (tau - Vector3.Cross(droneState.Omega, new Vector3(temp1.x, temp1.y, temp1.z)));
-            Vector4 temp3 = I.inverse * new Vector4(temp2.x, temp2.y, temp2.z, 0f);
-            return new Vector3(temp3.x, temp3.y, temp3.z);
+            Vector4 temp1 = (Imatrix4 * new Vector4(droneState.Omega.x * D2R, droneState.Omega.y* D2R, droneState.Omega.z* D2R, 0f));
+            Vector3 temp2 = (tau - Vector3.Cross(droneState.Omega* D2R, new Vector3(temp1.x, temp1.y, temp1.z)));
+            Vector4 temp3 = Imatrix4_inv * new Vector4(temp2.x, temp2.y, temp2.z, 0f);
+            return new Vector3(temp3.x* R2D, temp3.y* R2D, temp3.z* R2D);
         }
         
         private Vector3 ComputeTorque(Vector4 inputRotorSpeed)
@@ -202,28 +221,12 @@ namespace UAV
                 + (inputRotorSpeed.z * inputRotorSpeed.z) -  (inputRotorSpeed.w * inputRotorSpeed.w));
             return new Vector3(tauX, tauY, tauZ);
         }
-        
-        private Matrix4x4 ComputeInertiaMatrix()
-        { 
-            /*
-            We can model our quadcopter as two thin uniform rods crossed at the origin with a point mass
-            (motor) at the end of each. With this in mind, it’s clear that the symmetries result in a diagonal
-            inertia matrix of the form I
-            */
-            Matrix4x4 I = Matrix4x4.zero;
-            I[0,0] = _Ixx;
-            I[1,1] = _Iyy;
-            I[2,2] = _Izz;
-            return I;
-        }
-    
-        
-        
+
         private Vector3 Omega2AngVel(Vector3 rotation, Vector3 omega)
         {
-            float phi = rotation.x;
-            float theta = rotation.y;
-            float psi = rotation.z;
+            float phi = rotation.x* D2R;
+            float theta = rotation.y* D2R;
+            float psi = rotation.z* D2R;
             
             //Instead of creating 3*3 matrix, I used the 4*4 with zero additional
             Matrix4x4 A2O = Matrix4x4.zero;
@@ -236,10 +239,23 @@ namespace UAV
             A2O[2, 0] = 0f;
             A2O[2, 1] = -Mathf.Sin(phi);
             A2O[2, 2] = Mathf.Cos(theta) * Mathf.Cos(phi);
+            A2O[3, 3] = 1f;
             //Debug.Log(A2O);
             Vector4 angVel = A2O.inverse * new Vector4(omega.x, omega.y, omega.z, 0.0f);
-            
-            return new Vector3(angVel.x, angVel.y, angVel.z);
+            return new Vector3(angVel.x* R2D, angVel.y* R2D, angVel.z* R2D);
+        }
+        
+        public static Quaternion QuaternionFromMatrix(Matrix4x4 m) {
+            // Adapted from: http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/index.htm
+            Quaternion q = new Quaternion();
+            q.w = Mathf.Sqrt( Mathf.Max( 0, 1 + m[0,0] + m[1,1] + m[2,2] ) ) / 2; 
+            q.x = Mathf.Sqrt( Mathf.Max( 0, 1 + m[0,0] - m[1,1] - m[2,2] ) ) / 2; 
+            q.y = Mathf.Sqrt( Mathf.Max( 0, 1 - m[0,0] + m[1,1] - m[2,2] ) ) / 2; 
+            q.z = Mathf.Sqrt( Mathf.Max( 0, 1 - m[0,0] - m[1,1] + m[2,2] ) ) / 2; 
+            q.x *= Mathf.Sign( q.x * ( m[2,1] - m[1,2] ) );
+            q.y *= Mathf.Sign( q.y * ( m[0,2] - m[2,0] ) );
+            q.z *= Mathf.Sign( q.z * ( m[1,0] - m[0,1] ) );
+            return q;
         }
 
         /*[00 01 02 03
