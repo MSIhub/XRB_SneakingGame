@@ -589,7 +589,6 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     1: STARTER_ASSETS_PACKAGES_CHECKED;ODIN_INSPECTOR;ODIN_INSPECTOR_3
-    7: ODIN_INSPECTOR;ODIN_INSPECTOR_3;STARTER_ASSETS_PACKAGES_CHECKED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
