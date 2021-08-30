@@ -504,9 +504,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83bd1f375a346eb40ac03e86fca6b9ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _instantiateMesh: {fileID: 567260659}
   _leftPrimaryButtonReference: {fileID: -5135507553088754037, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   _rightPrimaryButtonReference: {fileID: 6591084020708648595, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  _instantiateMesh: {fileID: 567260659}
+  _rightSecondaryButtonReference: {fileID: 5821058811172809656, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   _leftPosition: {fileID: -2024308242397127297, guid: c348712bda248c246b8c49b3db54643f, type: 3}
   _leftRotation: {fileID: 8248158260566104461, guid: c348712bda248c246b8c49b3db54643f, type: 3}
 --- !u!43 &63674742
@@ -3768,6 +3769,7 @@ GameObject:
   - component: {fileID: 567260660}
   - component: {fileID: 567260665}
   - component: {fileID: 567260664}
+  - component: {fileID: 567260666}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -3883,10 +3885,36 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 49774252}
+        m_TargetAssemblyTypeName: StackACube.CubeManipulation, Assembly-CSharp
+        m_MethodName: EnableScaleMesh
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 567260664}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable,
+            Unity.XR.Interaction.Toolkit
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_SelectExited:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 49774252}
+        m_TargetAssemblyTypeName: StackACube.CubeManipulation, Assembly-CSharp
+        m_MethodName: DisableScaleMesh
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 567260664}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.XR.Interaction.Toolkit.XRGrabInteractable,
+            Unity.XR.Interaction.Toolkit
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_Activated:
     m_PersistentCalls:
       m_Calls: []
@@ -3973,6 +4001,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &567260666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 567260659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46fe0abe4d3e0204abc622f50fa2a240, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &585160062
 Mesh:
   m_ObjectHideFlags: 0
