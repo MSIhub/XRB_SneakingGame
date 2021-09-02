@@ -26,12 +26,13 @@ namespace UAV
         {
             Vector3 thrustRhf = ComputeThrust(_inputRotorSpeed);
             Vector3 thrustLhf = _TRight2Left* thrustRhf;
-            //rb.AddRelativeForce(thrustLhf,ForceMode.Acceleration);
-            rb.AddForceAtPosition(thrustLhf,transform.position,ForceMode.Acceleration);
+            //rb.AddRelativeForce(new Vector3(0.0f,100.0f,0.0f),ForceMode.Acceleration);
+            //rb.AddForceAtPosition(thrustLhf,transform.position,ForceMode.Acceleration);
 
-            Vector3 torqueRhf = ComputeTorque(_inputRotorSpeed);
-            Vector3 torqueLhf = _TRight2Left* torqueRhf;
-            rb.AddRelativeTorque(torqueLhf,ForceMode.VelocityChange);
+           // Vector3 torqueRhf = ComputeTorque(_inputRotorSpeed);
+           // Vector3 torqueLhf = _TRight2Left* torqueRhf;
+            //rb.AddRelativeTorque(new Vector3(1.0f,0.0f,0.0f),ForceMode.VelocityChange);
+            rb.AddTorque(new Vector3(1.0f,0.0f,0.0f),ForceMode.VelocityChange);
             
         }
 
