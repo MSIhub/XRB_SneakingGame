@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UAV
@@ -10,6 +11,8 @@ namespace UAV
         private float _k = 0.1f; //Motor lift constant [Measured value specific to a motor]
         private float _b = 0.2f;// Drag constant
         private Rigidbody rb;
+        [SerializeField] private Vector3 _thrust =new Vector3(0.0f,1.0f,0.0f);
+        [SerializeField] private Vector3 _torque =new Vector3(1.0f,0.0f,0.0f);
         [SerializeField] private Vector4 _inputRotorSpeed = new Vector4(1f, 1f,1f,1f) *1f;
         //RHF to LHF
         private static readonly Matrix4x4 _TRight2Left = new Matrix4x4(new Vector4(1f, 0f, 0f,0f), 
@@ -26,14 +29,19 @@ namespace UAV
         {
             Vector3 thrustRhf = ComputeThrust(_inputRotorSpeed);
             Vector3 thrustLhf = _TRight2Left* thrustRhf;
-            //rb.AddRelativeForce(new Vector3(0.0f,100.0f,0.0f),ForceMode.Acceleration);
+            rb.AddForce(_thrust,ForceMode.Acceleration);
             //rb.AddForceAtPosition(thrustLhf,transform.position,ForceMode.Acceleration);
 
            // Vector3 torqueRhf = ComputeTorque(_inputRotorSpeed);
            // Vector3 torqueLhf = _TRight2Left* torqueRhf;
             //rb.AddRelativeTorque(new Vector3(1.0f,0.0f,0.0f),ForceMode.VelocityChange);
-            rb.AddTorque(new Vector3(1.0f,0.0f,0.0f),ForceMode.VelocityChange);
             
+            
+        }
+        [Button]
+        private void AddTorque()
+        {
+            rb.AddTorque(_torque, ForceMode.Acceleration);
         }
 
         private Vector3 ComputeThrust(Vector4 inputRotorSpeed)
