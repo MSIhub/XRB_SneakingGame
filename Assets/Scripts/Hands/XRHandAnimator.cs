@@ -19,7 +19,16 @@ namespace Hands
             _controller.activateAction.action.started += Fist;
             _controller.activateAction.action.canceled += FistReleased;
         }
-        
+// it is essential to unsubsribe to the Unity events.
+        private void OnDestroy()
+        {
+            _controller.selectAction.action.started -= Point;
+            _controller.selectAction.action.canceled -= PointReleased;
+            
+            
+            _controller.activateAction.action.started -= Fist;
+            _controller.activateAction.action.canceled -= FistReleased;
+        }
 
         private void Point(InputAction.CallbackContext ctx)
         {

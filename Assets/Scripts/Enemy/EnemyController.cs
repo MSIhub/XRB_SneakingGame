@@ -70,7 +70,6 @@ public class EnemyController : MonoBehaviour
             {
                 ReturnToPatrol();
                 _animator.SetBool("Stunned", false);
-                
             }
         }
     }
