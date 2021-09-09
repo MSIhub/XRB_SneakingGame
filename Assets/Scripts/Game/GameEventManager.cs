@@ -1,25 +1,24 @@
-using System;
 using StarterAssets;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
-namespace DefaultNamespace
+namespace Game
 {
     public class GameEventManager : MonoBehaviour
     {
-        [Header("UI")]
-        [SerializeField] private CanvasGroup _canvasGroup;
+        [Header("Accessibility")] 
+        public Handed handedness;
+        
+        [Header("UI")] [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField] private GameObject _failedPanel;
         [SerializeField] private GameObject _successPanel;
         [SerializeField] private float _canvasFadeTime = 2f;
 
-        [Header("Audio")] 
-        [SerializeField] private AudioSource _bgmSource;
+        [Header("Audio")] [SerializeField] private AudioSource _bgmSource;
         [SerializeField] private AudioClip _caughtMusic;
         [SerializeField] private AudioClip _successMusic;
-        
+
         private PlayerInput _playerInput;
         private FirstPersonController _fpController;
         private bool _isFadingIn = false;
@@ -28,7 +27,8 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            EnemyController[] enemies = FindObjectsOfType<EnemyController>(); //Unoptimized way of handling this. Only once used.
+            EnemyController[]
+                enemies = FindObjectsOfType<EnemyController>(); //Unoptimized way of handling this. Only once used.
             foreach (EnemyController enemy in enemies)
             {
                 enemy.onInvestigate.AddListener(EnemyInvestigating);
@@ -36,31 +36,29 @@ namespace DefaultNamespace
                 enemy.onReturnToPatrol.AddListener(EnemyReturnToPatrol);
             }
 
-            GameObject player = GameObject.FindWithTag("Player");//UnOptimized way
+            GameObject player = GameObject.FindWithTag("Player"); //UnOptimized way
             if (player)
             {
-                _playerInput = player.GetComponent<PlayerInput>();    
+                _playerInput = player.GetComponent<PlayerInput>();
                 _fpController = player.GetComponent<FirstPersonController>();
             }
             else
             {
                 Debug.LogWarning("There is no player in the scene");
             }
-            
-            
+
+
             //Setting the fail and success canvas to not show on the start of the game
-            _canvasGroup.alpha = 0; 
+            _canvasGroup.alpha = 0;
             _failedPanel.SetActive(false);
             _successPanel.SetActive(false);
-
         }
 
         private void EnemyReturnToPatrol()
         {
-            
         }
 
-        private void PlayerFound(Transform enemyThatFoundPlayer)//mission failed method
+        private void PlayerFound(Transform enemyThatFoundPlayer) //mission failed method
         {
             if (_isGoalReached) return;
             _isFadingIn = true;
@@ -70,8 +68,8 @@ namespace DefaultNamespace
             DeactivateInput();
             PlayBGM(_caughtMusic);
         }
-        
-        public void GoalReached()//mission success method
+
+        public void GoalReached() //mission success method
         {
             _isFadingIn = true;
             _isGoalReached = true;
@@ -79,17 +77,15 @@ namespace DefaultNamespace
             DeactivateInput();
             PlayBGM(_successMusic);
         }
-        
-        
+
 
         private void DeactivateInput()
         {
             //Deactivated player input
-            _playerInput.DeactivateInput(); 
+            _playerInput.DeactivateInput();
             //unlock the cursor
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-
         }
 
         private void PlayBGM(AudioClip newBgm)
@@ -101,7 +97,6 @@ namespace DefaultNamespace
 
         private void EnemyInvestigating()
         {
-            
         }
 
         public void RestartScene()
@@ -120,7 +115,7 @@ namespace DefaultNamespace
                 {
                     if (_canvasFadeTime > 0f)
                     {
-                        _fadeLevel += Time.deltaTime/_canvasFadeTime;
+                        _fadeLevel += Time.deltaTime / _canvasFadeTime;
                     }
                 }
             }
@@ -130,13 +125,12 @@ namespace DefaultNamespace
                 {
                     if (_canvasFadeTime > 0f)
                     {
-                        _fadeLevel -= Time.deltaTime/_canvasFadeTime;    
+                        _fadeLevel -= Time.deltaTime / _canvasFadeTime;
                     }
                 }
             }
+
             _canvasGroup.alpha = _fadeLevel;
         }
-        
-        
     }
 }

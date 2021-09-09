@@ -5,13 +5,20 @@ namespace XR
 {
     public class MinimapRotator : MonoBehaviour
     {
-        [SerializeField] private Transform _rotationReference;
-
+        [SerializeField] private Transform _leftHandTransform;
+        [SerializeField] private Transform _rightHandTransform;
+        
+        
+        private Transform _rotationReference;
         private Vector3 _initialRotation;
+        private Handedness _handedness;
         // Start is called before the first frame update
         private void Start()
         {
             _initialRotation = transform.eulerAngles;
+            _handedness = GetComponent<Handedness>();
+            _rotationReference = _handedness.handed == Handed.Left ? _rightHandTransform : _leftHandTransform;
+            
         }
 
         // Update is called once per frame
