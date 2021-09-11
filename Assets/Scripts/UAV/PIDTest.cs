@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace UAV
@@ -33,22 +34,21 @@ namespace UAV
         private Vector3 ProcessVariableLast { get; set; } = Vector3.zero;
     
         // Update is called once per frame
-        private void Update()
-        {
+        private void FixedUpdate()
+        { 
             _setPoint = _targetPose.position;//set point
             ProcessVariable = _rb.position; //process variable
-            _diffProcessVariable = (_setPoint-ProcessVariable) - (_setPoint-ProcessVariableLast);// derivative error
+            _diffProcessVariable = (ProcessVariable) - (ProcessVariableLast);// derivative error
             _error = _setPoint - ProcessVariable; //error
-            if (!(_error.magnitude > 0.1f)) return;
-            DoMotion();
+            
         }
-
+        
+        [Button]
         private void DoMotion()
         {
-        
+            if ((_error.magnitude < 0.5f)) return;
             _integralTerm += (_Ki * _error * Time.fixedDeltaTime);// integral term calculation
             //Vector3.ClampMagnitude()
-            Debug.Log(_diffProcessVariable);
             _derivativeTerm = _Kd * (_diffProcessVariable / Time.fixedDeltaTime);// derivative term calculation
             _proportionalTerm = (_Kp * _error); // Proportional term calculation
             var pidOutput = _proportionalTerm + _integralTerm - _derivativeTerm;
