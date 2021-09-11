@@ -1,3 +1,4 @@
+using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -20,7 +21,7 @@ namespace UAV
         private Vector3 _diffProcessVariable = Vector3.zero;
         private Vector3 _processVariable =Vector3.zero;
 
-
+        private IEnumerator motionCoroutine;
         private Vector3 ProcessVariable
         {
             get => _processVariable;
@@ -40,10 +41,37 @@ namespace UAV
             ProcessVariable = _rb.position; //process variable
             _diffProcessVariable = (ProcessVariable) - (ProcessVariableLast);// derivative error
             _error = _setPoint - ProcessVariable; //error
-            
+            //if ((_error.magnitude < 0.5f)) 
+            if (motionCoroutine != null)
+            {
+                StopCoroutine(motionCoroutine);
+            }
+            motionCoroutine = DoMotion();
+            StartCoroutine(motionCoroutine);
+
         }
-        
-        [Button]
+
+
+        private IEnumerator DoMotion()
+        {
+            while (_error.magnitude > 0.5f)
+            {
+                _integralTerm += (_Ki * _error * Time.fixedDeltaTime);// integral term calculation
+                //Vector3.ClampMagnitude()
+                _derivativeTerm = _Kd * (_diffProcessVariable / Time.fixedDeltaTime);// derivative term calculation
+                _proportionalTerm = (_Kp * _error); // Proportional term calculation
+                var pidOutput = _proportionalTerm + _integralTerm - _derivativeTerm;
+                _rb.AddForce(pidOutput, ForceMode.Impulse);
+                yield return null;    
+            }
+        }
+    
+
+    }
+}
+
+
+/*        [Button]
         private void DoMotion()
         {
             if ((_error.magnitude < 0.5f)) return;
@@ -53,8 +81,4 @@ namespace UAV
             _proportionalTerm = (_Kp * _error); // Proportional term calculation
             var pidOutput = _proportionalTerm + _integralTerm - _derivativeTerm;
             _rb.AddForce(pidOutput, ForceMode.Impulse);
-        }
-    
-
-    }
-}
+        }*/
