@@ -21,7 +21,7 @@ namespace UAV
         private Vector3 _diffProcessVariable = Vector3.zero;
         private Vector3 _processVariable =Vector3.zero;
 
-        private IEnumerator motionCoroutine;
+        private IEnumerator _motionCoroutine;
         private Vector3 ProcessVariable
         {
             get => _processVariable;
@@ -41,23 +41,26 @@ namespace UAV
             ProcessVariable = _rb.position; //process variable
             _diffProcessVariable = (ProcessVariable) - (ProcessVariableLast);// derivative error
             _error = _setPoint - ProcessVariable; //error
-            //if ((_error.magnitude < 0.5f)) 
-            if (motionCoroutine != null)
+            if (_motionCoroutine != null)
             {
-                StopCoroutine(motionCoroutine);
+                StopCoroutine(_motionCoroutine);
             }
-            motionCoroutine = DoMotion();
-            StartCoroutine(motionCoroutine);
+            _motionCoroutine = DoMotion();
+            StartCoroutine(_motionCoroutine);
 
         }
 
 
         private IEnumerator DoMotion()
         {
-            while (_error.magnitude > 0.5f)
+            while (_error.magnitude > 0.2f)
             {
                 _integralTerm += (_Ki * _error * Time.fixedDeltaTime);// integral term calculation
-                //Vector3.ClampMagnitude()
+                //Prevent Integral Windup--> Causes system to go unstable and cause lengthy oscillations instead of settling
+                if (_integralTerm.magnitude >0.01f)
+                {
+                    _integralTerm = Vector3.zero;
+                }
                 _derivativeTerm = _Kd * (_diffProcessVariable / Time.fixedDeltaTime);// derivative term calculation
                 _proportionalTerm = (_Kp * _error); // Proportional term calculation
                 var pidOutput = _proportionalTerm + _integralTerm - _derivativeTerm;
@@ -69,16 +72,3 @@ namespace UAV
 
     }
 }
-
-
-/*        [Button]
-        private void DoMotion()
-        {
-            if ((_error.magnitude < 0.5f)) return;
-            _integralTerm += (_Ki * _error * Time.fixedDeltaTime);// integral term calculation
-            //Vector3.ClampMagnitude()
-            _derivativeTerm = _Kd * (_diffProcessVariable / Time.fixedDeltaTime);// derivative term calculation
-            _proportionalTerm = (_Kp * _error); // Proportional term calculation
-            var pidOutput = _proportionalTerm + _integralTerm - _derivativeTerm;
-            _rb.AddForce(pidOutput, ForceMode.Impulse);
-        }*/
