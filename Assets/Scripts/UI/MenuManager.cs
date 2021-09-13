@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace UI
@@ -7,6 +9,13 @@ namespace UI
     {
         
         [SerializeField] private List<GameObject> _windows;
+        [SerializeField] private TMP_Text _dominantHandText;
+
+        private void Awake()
+        {
+            Handed handedness = (Handed) PlayerPrefs.GetInt("handedness");
+            _dominantHandText.text = handedness == Handed.Left ? "Left" : "Right";
+        }
 
         public void OpenWindow(int index)
         {
