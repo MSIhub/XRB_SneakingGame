@@ -10,16 +10,28 @@ namespace UI
 
         public void OpenWindow(int index)
         {
-            foreach (var win in _windows)
-            {
-                win.SetActive(false);
-            }
+            CloseAllWindows();
             _windows[index].SetActive(true);
         }
 
         public void CloseMenu()
         {
+            CloseAllWindows();
+            Invoke(nameof(DeactivateMenu), 0.05f);
+        }
+
+        private void DeactivateMenu()
+        {
             gameObject.SetActive(false);
         }
+        
+        public void CloseAllWindows()
+        {
+            foreach (var win in _windows)
+            {
+                win.SetActive(false);
+            }
+        }
+
     }
 }

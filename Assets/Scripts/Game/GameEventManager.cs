@@ -38,6 +38,11 @@ namespace Game
         private Color _initialSkyboxColor;
         private float _initialSkyboxExposure;
 
+        private void Awake()
+        {
+            handedness = (Handed) PlayerPrefs.GetInt("handedness");
+        }
+
         private void Start()
         {
             EnemyController[]
@@ -174,6 +179,11 @@ namespace Game
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+        public void QuitGame()
+        {
+            Application.Quit();
+        }
+
         private void Update()
         {
             if (_isFadingIn)
@@ -198,6 +208,13 @@ namespace Game
             }
 
             _canvasGroup.alpha = _fadeLevel;
+        }
+
+        public void ToggleDominantHand()
+        {
+            handedness = handedness == Handed.Right ? Handed.Left : Handed.Right;
+            PlayerPrefs.SetInt("handedness", (int) handedness); //Saving playerpreferances over multiple passthroughs
+            PlayerPrefs.Save();
         }
     }
 }
