@@ -2286,7 +2286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &161706325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2374,8 +2374,8 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 161706324}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -70.341}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.6589966}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children:
   - {fileID: 1403477306}
@@ -2383,12 +2383,12 @@ RectTransform:
   - {fileID: 2095141068}
   - {fileID: 781719103}
   - {fileID: 1423761288}
-  m_Father: {fileID: 0}
-  m_RootOrder: 21
+  m_Father: {fileID: 59022956}
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 33, y: 3.5}
+  m_AnchoredPosition: {x: 0, y: 1.5}
   m_SizeDelta: {x: 70, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &161706330
@@ -3172,6 +3172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 203491618}
   - component: {fileID: 203491619}
+  - component: {fileID: 203491620}
   m_Layer: 5
   m_Name: SfxSlider
   m_TagString: Untagged
@@ -3245,13 +3246,27 @@ MonoBehaviour:
   m_FillRect: {fileID: 1091830145}
   m_HandleRect: {fileID: 1240994572}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &203491620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203491617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aafcc5751bd76664cb43d345bdeea715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mixer: {fileID: 24100000, guid: e9ca766e7dd566f4bbdebc724df15ca6, type: 2}
+  _mixerVolumeExposedParam: SFXVolume
 --- !u!1001 &203577917
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18197,7 +18212,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 22
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1074231835
 GameObject:
@@ -95350,6 +95365,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1847867653}
   - component: {fileID: 1847867654}
+  - component: {fileID: 1847867655}
   m_Layer: 5
   m_Name: MusicSlider
   m_TagString: Untagged
@@ -95423,13 +95439,27 @@ MonoBehaviour:
   m_FillRect: {fileID: 894857372}
   m_HandleRect: {fileID: 1884188698}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.0001
   m_MaxValue: 1
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1847867655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847867652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aafcc5751bd76664cb43d345bdeea715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mixer: {fileID: 24100000, guid: e9ca766e7dd566f4bbdebc724df15ca6, type: 2}
+  _mixerVolumeExposedParam: MusicVolume
 --- !u!1 &1850544378
 GameObject:
   m_ObjectHideFlags: 0
@@ -96804,7 +96834,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1933965341
 Transform:
   m_ObjectHideFlags: 0
@@ -100054,6 +100084,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 3957002477819419433, guid: 2db29326587f41f46bfe5ff05114afd5, type: 3}
+      propertyPath: handed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3957002477819419433, guid: 2db29326587f41f46bfe5ff05114afd5, type: 3}
       propertyPath: _gameManager
       value: 
       objectReference: {fileID: 1996517485}
@@ -100256,6 +100290,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 205316689, guid: 3cad8b06882eb9f43b230020347b91d3, type: 3}
+      propertyPath: handed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 205316689, guid: 3cad8b06882eb9f43b230020347b91d3, type: 3}
       propertyPath: _gameManager
       value: 

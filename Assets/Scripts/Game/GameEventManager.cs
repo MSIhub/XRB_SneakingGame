@@ -212,9 +212,19 @@ namespace Game
 
         public void ToggleDominantHand()
         {
-            handedness = handedness == Handed.Right ? Handed.Left : Handed.Right;
+            if (handedness == Handed.Right)
+            {
+                handedness = Handed.Left;
+            }
+            else
+            {
+                handedness = Handed.Right;
+            }
+            //handedness = handedness == Handed.Right ? Handed.Left : Handed.Right;
             PlayerPrefs.SetInt("handedness", (int) handedness); //Saving playerpreferances over multiple passthroughs
             PlayerPrefs.Save();
+            
+            RestartScene();
         }
     }
 }
