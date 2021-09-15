@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class KeyCard : MonoBehaviour
 {
-    public int keyCardLevel = 1;
+    public int keyCardLevel = 2;
 }

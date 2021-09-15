@@ -179,6 +179,10 @@ namespace Game
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
+        public void ChangeScene(string sceneName)
+        {
+            SceneManager.LoadScene(sceneName);
+        }
         public void QuitGame()
         {
             Application.Quit();
@@ -212,14 +216,7 @@ namespace Game
 
         public void ToggleDominantHand()
         {
-            if (handedness == Handed.Right)
-            {
-                handedness = Handed.Left;
-            }
-            else
-            {
-                handedness = Handed.Right;
-            }
+            handedness = handedness == Handed.Right ? Handed.Left : Handed.Right;
             //handedness = handedness == Handed.Right ? Handed.Left : Handed.Right;
             PlayerPrefs.SetInt("handedness", (int) handedness); //Saving playerpreferances over multiple passthroughs
             PlayerPrefs.Save();

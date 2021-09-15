@@ -41,13 +41,14 @@ public class EnemyController : MonoBehaviour
     private float _stunnedTimer = 0f;
     
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         _currentPoint = _patrolRoute.route[_routeIndex];
+        GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         _animator.SetFloat("Speed", _agent.velocity.magnitude);
             
